@@ -4,6 +4,10 @@
 
 Live: **https://marvis-one.vercel.app**. Source is private; this is its public page.
 
+<p align="center">
+  <img src="assets/preview.webp" alt="bot-ui — the live site" width="100%">
+</p>
+
 It started as eBot, a voice-first AI cockpit, and was re-centered into a CRM in June 2026 as an adaptation rather than a rewrite: the pipeline and the 60-second scheduler already existed, so the work was adding Projects and Schedule, reframing 77 user-facing strings, and folding the eight AI surfaces behind one **Assistant** entry. Repo and storage keys stay `bot-ui`/`marvis` for compatibility.
 
 ## Sending a bot at a to-do and getting the answer back on the item
