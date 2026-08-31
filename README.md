@@ -2,13 +2,23 @@
 
 **A personal CRM for two people — leads, contacts, a deal pipeline, a personal schedule and projects — with a 43-agent assistant fleet you can send at any to-do. Built for one operator and a partner, not a sales team.**
 
-Live: **https://marvis-one.vercel.app**. Source is private; this is its public page.
+Live: **[marvis-one.vercel.app](https://marvis-one.vercel.app)**
 
 <p align="center">
   <img src="assets/preview.webp" alt="bot-ui — the live site" width="100%">
 </p>
 
 It started as eBot, a voice-first AI cockpit, and was re-centered into a CRM in June 2026 as an adaptation rather than a rewrite: the pipeline and the 60-second scheduler already existed, so the work was adding Projects and Schedule, reframing 77 user-facing strings, and folding the eight AI surfaces behind one **Assistant** entry. Repo and storage keys stay `bot-ui`/`marvis` for compatibility.
+
+## Screenshots
+
+![Agents view — 43 specialists under MARVIS in 8 categories, each with a "Work with" action](assets/agents-fleet.webp)
+
+![Agent workspace — the free Action Panel: 16 keyless actions and four multi-step chains, all at $0](assets/agent-workspace.webp)
+
+<p align="center">
+  <img src="assets/mobile-home.webp" alt="Mobile Today view — open tasks, overdue, active projects and pipeline KPIs with the quick-dispatch box" width="300">
+</p>
 
 ## Sending a bot at a to-do and getting the answer back on the item
 
@@ -20,11 +30,11 @@ Every to-do carries a **Send bot** action: `sendTodoToBot(id)` opens the agent w
 
 ## Merging a boot pull without eating local edits
 
-A shared-workspace code overrides `Sync.clientId()` so both partners write one Supabase row once `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` are set — they are not set today, so `/api/state` answers `503 no_supabase` and the app runs local-first. `pullAndMerge` does a per-id union with last-write-wins on todos/projects/meetings, so a boot pull cannot clobber locally created items. With no Supabase configured the topbar says "Saved on this device, cloud sync off" rather than faking sync.
+A shared-workspace code overrides `Sync.clientId()` so both partners write one Supabase row once `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` are set — they are not set today, so `/api/state` answers `503 no_supabase` and the app runs local-first. `pullAndMerge` does a per-id union with last-write-wins on todos/projects/meetings, so a boot pull cannot clobber locally created items. With no Supabase configured the topbar Sync button reports "Saved on this device — cloud sync is off" rather than faking sync.
 
 ## Closing an auth kill-switch
 
-An earlier hardening pass was latent breakage: the client never sent `x-api-secret`, so setting `PROXY_SECRET` would have 401'd every dispatch, voice and proxy call. `apiJsonHeaders()` now attaches it to all 19 same-origin `/api/*` POSTs plus three `/api/state` calls, and `api/state.js` came under the same gate. Around it: per-IP rate limits, an `ALLOWED_ORIGINS` allowlist, and a write audit log that records parameter *key names* only.
+An earlier hardening pass was latent breakage: the client never sent `x-api-secret`, so setting `PROXY_SECRET` would have 401'd every dispatch, voice and proxy call. `apiJsonHeaders()` now attaches it to every same-origin `/api/*` POST and to the `/api/state` sync calls, and `api/state.js` came under the same gate. Around it: per-IP rate limits, an `ALLOWED_ORIGINS` allowlist, and a write audit log that records parameter *key names* only.
 
 ## How it was verified
 
@@ -36,3 +46,5 @@ An earlier hardening pass was latent breakage: the client never sent `x-api-secr
 ## What it runs on
 
 `vanilla HTML/CSS/JS` `~1MB single-file shell` `Vercel Edge Functions` `TypeScript` `Supabase sync (env unset)` `Cloudflare D1 (cutover pending)` `network-first service worker` `PWA` `inline SVG charts`
+
+Source is private. Built by [@shear559](https://github.com/shear559).
